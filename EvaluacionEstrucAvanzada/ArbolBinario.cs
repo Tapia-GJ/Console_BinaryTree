@@ -15,7 +15,6 @@ namespace EvaluacionEstrucAvanzada
         {
             raiz = null;
         }
-
         public void Insertar(DateTime fecha, string nombre)
         {
             if (raiz == null)
@@ -129,9 +128,29 @@ namespace EvaluacionEstrucAvanzada
         }
         public void Buscar(DateTime fecha)
         {
-            Console.WriteLine("Nombre: "+BuscarNodo(raiz, fecha).NombreLibro + "\nFecha Publicación: " +BuscarNodo(raiz, fecha).FechaPublicacion);
+            var validar = BuscarNodo(raiz, fecha);
+            if (validar != null)
+            {
+                Console.WriteLine("Nombre: " + BuscarNodo(raiz, fecha).NombreLibro + "\nFecha Publicación: " + BuscarNodo(raiz, fecha).FechaPublicacion.ToString("dd-MM-yyyy"));
+            }
+            else
+            {
+                Console.WriteLine("No existe");
+            }
         }
 
+        public bool ValidaExistencia(DateTime fecha)
+        {
+            var validar = BuscarNodo(raiz, fecha);
+            if (validar != null)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
         private Nodo BuscarNodo(Nodo nodo, DateTime fecha)
         {
             if (nodo == null || nodo.FechaPublicacion == fecha)
@@ -148,6 +167,33 @@ namespace EvaluacionEstrucAvanzada
                 return BuscarNodo(nodo.NodoDerecho, fecha);
             }
         }
+        //public void Editar(DateTime fecha, string nuevoNombre, DateTime nuevafecha)
+        public void Editar(DateTime fecha, string nuevoNombre)
+        {
+            EditarNodo(raiz, fecha, nuevoNombre);
+        }
+
+        //private void EditarNodo(Nodo nodo, DateTime fecha, string nuevoNombre, DateTime nuevafecha)
+        private void EditarNodo(Nodo nodo, DateTime fecha, string nuevoNombre)
+        {
+            if (nodo != null)
+            {
+                if (nodo.FechaPublicacion == fecha)
+                {
+                    nodo.NombreLibro = nuevoNombre;
+                    //nodo.FechaPublicacion = nuevafecha;
+                }
+                else if (DateTime.Compare(fecha, nodo.FechaPublicacion) < 0)
+                {
+                    EditarNodo(nodo.NodoIzquierdo, fecha, nuevoNombre);
+                }
+                else
+                {
+                    EditarNodo(nodo.NodoDerecho, fecha, nuevoNombre);
+                }
+            }
+        }
+
 
     }
 }
